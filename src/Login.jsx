@@ -333,7 +333,6 @@
 // }
 
 
-
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -347,24 +346,27 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Form submitted", API_URL, username, password);
 
     try {
       const res = await axios.post(`${API_URL}/api/login`, {
         username: username.trim(),
-        password: password.trim(),
+        password: password.trim()
       });
 
       if (res.data.success) {
+        // ✅ Store user info for use in Navbar and route protection
+        localStorage.setItem('username', res.data.username);
+        localStorage.setItem('role', res.data.role); // 🔄 Unified key: 'role'
+
         alert('Login successful');
-        localStorage.setItem("username", res.data.username);
-        localStorage.setItem("role", res.data.role);
-        navigate("/home");
+        navigate('/home');
       } else {
         alert(res.data.message);
       }
     } catch (err) {
       console.error(err.response?.data || err.message);
-      alert(err.response?.data?.message || "Server error");
+      alert(err.response?.data?.message || 'Server error');
     }
   };
 
@@ -378,8 +380,8 @@ export default function Login() {
             className="h-12 w-12"
           />
         </div>
-        <h2 className="text-center text-3xl font-bold text-gray-900">
-          Sign in to Truck Tracking
+        <h2 className="text-center text-3xl font-bold tracking-tight text-gray-900">
+          Sign in to Truck_tracking
         </h2>
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
@@ -393,7 +395,7 @@ export default function Login() {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
-              className="mt-1 w-full rounded border border-gray-300 px-4 py-2"
+              className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             />
           </div>
 
@@ -407,19 +409,33 @@ export default function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="mt-1 w-full rounded border border-gray-300 px-4 py-2"
+              className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             />
           </div>
 
-          <button
-            type="submit"
-            className="w-full rounded bg-indigo-600 py-2 text-white hover:bg-indigo-500"
-          >
-            Sign in
-          </button>
+          <div className="flex items-center justify-between text-sm">
+            <a href="#" className="text-indigo-600 hover:text-indigo-500 font-medium">
+              Forgot password?
+            </a>
+          </div>
+
+          <div>
+            <button
+              type="submit"
+              className="w-full rounded-lg bg-indigo-600 px-4 py-2 text-white font-semibold hover:bg-indigo-500 transition duration-200"
+            >
+              Sign in
+            </button>
+          </div>
         </form>
+
+        <p className="mt-6 text-center text-sm text-gray-600">
+          Not a member?{' '}
+          <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
+            Start your free trial
+          </a>
+        </p>
       </div>
     </div>
   );
 }
-
