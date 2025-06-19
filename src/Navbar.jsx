@@ -760,7 +760,6 @@
 // }
 
 // export default Navbar;
-
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -771,16 +770,13 @@ function Navbar() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // ✅ Read from localStorage once component mounts
-    const storedRole = localStorage.getItem('userRole'); // use 'userRole' consistently
-    const storedUsername = localStorage.getItem('username');
-    setUserRole(storedRole);
-    setUsername(storedUsername);
+    setUserRole(localStorage.getItem('userRole'));
+    setUsername(localStorage.getItem('username'));
   }, []);
 
   const handleLogout = () => {
     localStorage.clear();
-    navigate('/login'); // redirect to login page
+    navigate('/login');
   };
 
   return (
@@ -793,14 +789,12 @@ function Navbar() {
             </Link>
             <div className="hidden md:flex md:ml-10 space-x-4">
               <Link to="/home" className="hover:text-indigo-300">Home</Link>
-
               {userRole === 'admin' && (
                 <>
                   <Link to="/admin" className="hover:text-indigo-300">Admin Panel</Link>
                   <Link to="/reports" className="hover:text-indigo-300">Reports</Link>
                 </>
               )}
-
               {userRole === 'staff' && (
                 <Link to="/gatekeeper" className="hover:text-indigo-300">GateKeeper</Link>
               )}
@@ -808,20 +802,15 @@ function Navbar() {
           </div>
 
           <div className="flex items-center space-x-4">
-            {/* ✅ Show username safely */}
             {username && (
-              <span className="hidden md:inline text-sm text-gray-300">
-                {username}
-              </span>
+              <span className="hidden md:inline text-sm text-gray-300">{username}</span>
             )}
-
             <button
               onClick={handleLogout}
               className="bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1 rounded-md"
             >
               Logout
             </button>
-
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="md:hidden focus:outline-none"
@@ -833,30 +822,22 @@ function Navbar() {
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
           </div>
         </div>
       </div>
 
-      {/* ✅ Mobile Menu */}
       {mobileMenuOpen && (
         <div className="md:hidden px-2 pt-2 pb-3 space-y-1">
           <Link to="/home" className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700">Home</Link>
-
           {userRole === 'admin' && (
             <>
               <Link to="/admin" className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700">Admin Panel</Link>
               <Link to="/reports" className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700">Reports</Link>
             </>
           )}
-
           {userRole === 'staff' && (
             <Link to="/gatekeeper" className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700">GateKeeper</Link>
           )}
