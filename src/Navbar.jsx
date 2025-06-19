@@ -761,25 +761,26 @@
 
 // export default Navbar;
 
-
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 function Navbar() {
-  const [adminOpen, setAdminOpen] = useState(false);
-  const [dispatcherOpen, setDispatcherOpen] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userRole, setUserRole] = useState(null);
+  const [username, setUsername] = useState('');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storedRole = localStorage.getItem('role'); // ✅ fixed key
+    // ✅ Read from localStorage once component mounts
+    const storedRole = localStorage.getItem('userRole'); // use 'userRole' consistently
+    const storedUsername = localStorage.getItem('username');
     setUserRole(storedRole);
+    setUsername(storedUsername);
   }, []);
 
   const handleLogout = () => {
     localStorage.clear();
-    navigate('/login'); // ✅ optional: redirect to login instead of "/"
+    navigate('/login'); // redirect to login page
   };
 
   return (
@@ -791,31 +792,29 @@ function Navbar() {
               Truck Tracking
             </Link>
             <div className="hidden md:flex md:ml-10 space-x-4">
-              <Link to="/home" className="hover:text-indigo-300">
-                Home
-              </Link>
+              <Link to="/home" className="hover:text-indigo-300">Home</Link>
+
               {userRole === 'admin' && (
                 <>
-                  <Link to="/admin" className="hover:text-indigo-300">
-                    Admin Panel
-                  </Link>
-                  <Link to="/reports" className="hover:text-indigo-300">
-                    Reports
-                  </Link>
+                  <Link to="/admin" className="hover:text-indigo-300">Admin Panel</Link>
+                  <Link to="/reports" className="hover:text-indigo-300">Reports</Link>
                 </>
               )}
+
               {userRole === 'staff' && (
-                <Link to="/gatekeeper" className="hover:text-indigo-300">
-                  GateKeeper
-                </Link>
+                <Link to="/gatekeeper" className="hover:text-indigo-300">GateKeeper</Link>
               )}
             </div>
           </div>
 
           <div className="flex items-center space-x-4">
-            <span className="hidden md:inline text-sm text-gray-300">
-              {localStorage.getItem('username')}
-            </span>
+            {/* ✅ Show username safely */}
+            {username && (
+              <span className="hidden md:inline text-sm text-gray-300">
+                {username}
+              </span>
+            )}
+
             <button
               onClick={handleLogout}
               className="bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1 rounded-md"
@@ -846,26 +845,20 @@ function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* ✅ Mobile Menu */}
       {mobileMenuOpen && (
         <div className="md:hidden px-2 pt-2 pb-3 space-y-1">
-          <Link to="/home" className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700">
-            Home
-          </Link>
+          <Link to="/home" className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700">Home</Link>
+
           {userRole === 'admin' && (
             <>
-              <Link to="/admin" className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700">
-                Admin Panel
-              </Link>
-              <Link to="/reports" className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700">
-                Reports
-              </Link>
+              <Link to="/admin" className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700">Admin Panel</Link>
+              <Link to="/reports" className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700">Reports</Link>
             </>
           )}
+
           {userRole === 'staff' && (
-            <Link to="/gatekeeper" className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700">
-              GateKeeper
-            </Link>
+            <Link to="/gatekeeper" className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700">GateKeeper</Link>
           )}
         </div>
       )}
@@ -874,4 +867,3 @@ function Navbar() {
 }
 
 export default Navbar;
-
