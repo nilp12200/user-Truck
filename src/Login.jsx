@@ -355,9 +355,9 @@ export default function Login() {
       });
 
       if (res.data.success) {
-        // ✅ Store user info for use in Navbar and route protection
-        localStorage.setItem('username', res.data.username);
-        localStorage.setItem('role', res.data.role); // 🔄 Unified key: 'role'
+        // ✅ Store user info to localStorage for role-based access & display
+        localStorage.setItem('username', res.data.username); // Ensure backend sends lowercase `username`
+        localStorage.setItem('userRole', res.data.role);     // Use `userRole` consistently
 
         alert('Login successful');
         navigate('/home');
