@@ -648,6 +648,120 @@
 
 
 
+// import React, { useState, useEffect } from 'react';
+// import { Link, useNavigate } from 'react-router-dom';
+
+// function Navbar() {
+//   const [adminOpen, setAdminOpen] = useState(false);
+//   const [dispatcherOpen, setDispatcherOpen] = useState(false);
+//   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+//   const [userRole, setUserRole] = useState(null);
+//   const navigate = useNavigate();
+
+//   useEffect(() => {
+//     const storedRole = localStorage.getItem('userRole');
+//     setUserRole(storedRole);
+//   }, []);
+
+//   const handleLogout = () => {
+//     localStorage.clear();
+//     navigate('/');
+//   };
+
+//   return (
+//     <nav className="bg-gray-900 text-white shadow-lg">
+//       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+//         <div className="flex justify-between h-16 items-center">
+//           <div className="flex items-center">
+//             <Link to="/home" className="text-xl font-bold text-white">
+//               Truck Tracking
+//             </Link>
+//             <div className="hidden md:flex md:ml-10 space-x-4">
+//               <Link to="/home" className="hover:text-indigo-300">
+//                 Home
+//               </Link>
+//               {userRole === 'admin' && (
+//                 <>
+//                   <Link to="/admin" className="hover:text-indigo-300">
+//                     Admin Panel
+//                   </Link>
+//                   <Link to="/reports" className="hover:text-indigo-300">
+//                     Reports
+//                   </Link>
+//                 </>
+//               )}
+//               {userRole === 'staff' && (
+//                 <Link to="/gatekeeper" className="hover:text-indigo-300">
+//                   GateKeeper
+//                 </Link>
+//               )}
+//             </div>
+//           </div>
+
+//           <div className="flex items-center space-x-4">
+//             <span className="hidden md:inline text-sm text-gray-300">
+//               {localStorage.getItem('username')}
+//             </span>
+//             <button
+//               onClick={handleLogout}
+//               className="bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1 rounded-md"
+//             >
+//               Logout
+//             </button>
+
+//             <button
+//               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+//               className="md:hidden focus:outline-none"
+//             >
+//               <svg
+//                 className="h-6 w-6 text-white"
+//                 xmlns="http://www.w3.org/2000/svg"
+//                 fill="none"
+//                 viewBox="0 0 24 24"
+//                 stroke="currentColor"
+//               >
+//                 <path
+//                   strokeLinecap="round"
+//                   strokeLinejoin="round"
+//                   strokeWidth={2}
+//                   d="M4 6h16M4 12h16M4 18h16"
+//                 />
+//               </svg>
+//             </button>
+//           </div>
+//         </div>
+//       </div>
+
+//       {/* Mobile Menu */}
+//       {mobileMenuOpen && (
+//         <div className="md:hidden px-2 pt-2 pb-3 space-y-1">
+//           <Link to="/home" className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700">
+//             Home
+//           </Link>
+//           {userRole === 'admin' && (
+//             <>
+//               <Link to="/admin" className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700">
+//                 Admin Panel
+//               </Link>
+//               <Link to="/reports" className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700">
+//                 Reports
+//               </Link>
+//             </>
+//           )}
+//           {userRole === 'staff' && (
+//             <Link to="/gatekeeper" className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700">
+//               GateKeeper
+//             </Link>
+//           )}
+//         </div>
+//       )}
+//     </nav>
+//   );
+// }
+
+// export default Navbar;
+
+
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -659,13 +773,13 @@ function Navbar() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storedRole = localStorage.getItem('userRole');
+    const storedRole = localStorage.getItem('role'); // ✅ fixed key
     setUserRole(storedRole);
   }, []);
 
   const handleLogout = () => {
     localStorage.clear();
-    navigate('/');
+    navigate('/login'); // ✅ optional: redirect to login instead of "/"
   };
 
   return (
@@ -760,3 +874,4 @@ function Navbar() {
 }
 
 export default Navbar;
+
