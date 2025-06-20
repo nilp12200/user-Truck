@@ -343,29 +343,32 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    try {
-      const res = await axios.post(`${API_URL}/api/login`, {
-        username: username.trim(),
-        password: password.trim(),
-      });
+  try {
+    const res = await axios.post(`${API_URL}/api/login`, {
+      username: username.trim(),
+      password: password.trim(),
+    });
 
-      if (res.data.success) {
-        localStorage.setItem('username', res.data.username);
-        localStorage.setItem('userRole', res.data.role); // store as userRole
+    console.log("Login Response:", res.data); // 🔍 DEBUG
 
-        alert('Login successful');
-        navigate('/home');
-      } else {
-        alert(res.data.message || 'Invalid credentials');
-      }
-    } catch (err) {
-      console.error(err.response?.data || err.message);
-      alert(err.response?.data?.message || 'Server error');
+    if (res.data.success) {
+      localStorage.setItem('username', res.data.username);
+      localStorage.setItem('userRole', res.data.role); // store role
+
+      console.log("✅ Stored role:", res.data.role); // 🔍 DEBUG
+      alert('Login successful');
+      navigate('/home');
+    } else {
+      alert(res.data.message || 'Invalid credentials');
     }
-  };
+  } catch (err) {
+    console.error(err.response?.data || err.message);
+    alert(err.response?.data?.message || 'Server error');
+  }
+};
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-indigo-50 to-indigo-200 px-6 py-12">
