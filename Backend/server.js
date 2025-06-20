@@ -660,7 +660,43 @@ app.get('/api/fetch-remarks', async (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 });
+// ✅ GET /plants -> Fetch from plantmaster
+app.get('/plants', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT PlantID, PlantName FROM plantmaster');
+    res.json(result.rows || result); // depends on DB driver
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Failed to fetch plant list' });
+  }
+});
 
+// ✅ POST /api/users -> Save new user
+app.post('/api/users', async (req, res) => {
+  const { username, password, contactnumber, role, allowedplants } = req.body;
+
+  if (!username || !password || !role || !contactnumber || !allowedplants) {
+    return res.status(400).json({ message: 'All fields are required' });
+  }
+
+  try {
+    const insertQuery = `
+      INSERT INTO users (username, password, role, contactnumber, allowedplants)
+      VALUES (?, ?, ?, ?, ?)
+    `;
+    await pool.query(insertQuery, [
+      username,
+      password,
+      role,
+      contactnumber,
+      JSON.stringify(allowedplants),
+    ]);
+    res.status(201).json({ message: 'User created successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Failed to create user' });
+  }
+});
 // 🚀 Start the server
 app.listen(PORT, () => {
   console.log(`🚀 Server is running at http://localhost:${PORT}`);
