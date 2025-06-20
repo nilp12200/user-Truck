@@ -1151,7 +1151,7 @@ function Navbar() {
               </button>
               {dispatcherOpen && (
                 <div className="absolute mt-2 w-56 bg-gray-800 rounded-xl shadow-2xl z-50 py-2 border border-gray-700">
-                  <RestrictedLink to="/truck" allowedRoles={["admin", "staff"]}>
+                  <RestrictedLink to="/truck" allowedRoles={["admin"]}>
                     <span className="block px-6 py-3 text-white hover:bg-yellow-400 hover:text-gray-900">
                       🚛 Truck Transaction
                     </span>
@@ -1168,7 +1168,7 @@ function Navbar() {
               🚪 Gate Keeper
             </Link>
 
-            <RestrictedLink to="/loader" allowedRoles={["admin", "staff"]}>
+            <RestrictedLink to="/loader" allowedRoles={["admin"]}>
               <span className="hover:text-yellow-400 flex items-center">
                 📦 Loader
               </span>
@@ -1231,7 +1231,7 @@ function Navbar() {
               </button>
               {dispatcherOpen && (
                 <div className="pl-6 space-y-2 mt-2">
-                  <RestrictedLink to="/truck" allowedRoles={["admin", "staff"]}>
+                  <RestrictedLink to="/truck" allowedRoles={["admin"]}>
                     <span className="block hover:text-yellow-400">📝 Truck Transaction</span>
                   </RestrictedLink>
                 </div>
@@ -1242,7 +1242,7 @@ function Navbar() {
               🚪 Gate Keeper
             </Link>
 
-            <RestrictedLink to="/loader" allowedRoles={["admin", "staff"]}>
+            <RestrictedLink to="/loader" allowedRoles={["admin"]}>
               <span className="block hover:text-yellow-400">📦 Loader</span>
             </RestrictedLink>
 
