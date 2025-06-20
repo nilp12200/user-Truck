@@ -23,7 +23,8 @@ export default function UserMaster() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
 
-  useEffect(() => {
+
+ useEffect(() => {
     fetchPlants();
   }, []);
 
@@ -31,14 +32,10 @@ export default function UserMaster() {
     try {
       const res = await axios.get(`${API_URL}/api/plants`);
       setPlantList(res.data);
-    } catch {
-      console.error('Error fetching plant list');
+    } catch (err) {
+      console.error('Error fetching plant list:', err);
     }
   };
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
   const handleModuleRightChange = (e) => {
     const { value, checked } = e.target;
     setFormData((prev) => ({
