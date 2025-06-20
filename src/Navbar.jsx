@@ -1093,7 +1093,7 @@ function Navbar() {
 
   const roleAccess = {
     owner: ['plantmaster', 'usermaster', 'truck', 'gate', 'loader', 'reports'],
-    admin: ['plantmaster', 'usermaster', 'gate', 'reports'],
+    admin: ['plantmaster', 'usermaster', 'truck','gate', 'loader', 'reports'],
     dispatch: ['truck'],
     gatekeeper: ['gate'],
     report: ['reports'],
