@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const MODULE_RIGHTS = [
   { label: 'Admin', value: 'admin' },
   { label: 'GateKeeper', value: 'gatekeeper' },
@@ -27,7 +29,7 @@ export default function UserMaster() {
 
   const fetchPlants = async () => {
     try {
-      const res = await axios.get('http://localhost:3001/api/plants');
+      const res = await axios.get(`${API_URL}/api/plants`);
       setPlantList(res.data);
     } catch {
       console.error('Error fetching plant list');
