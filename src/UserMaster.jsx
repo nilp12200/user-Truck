@@ -72,7 +72,7 @@ export default function UserMaster() {
 
     setLoading(true);
     try {
-      await axios.post('http://localhost:3001/api/users', formData);
+      await axios.post(`${API_URL}/api/users`, formData);
       setMessage('✅ User created successfully!');
       setFormData({ username: '', password: '', contactNumber: '', moduleRights: [], allowedPlants: [] });
     } catch {
