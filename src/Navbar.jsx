@@ -1057,7 +1057,6 @@
 // }
 
 // export default Navbar;
-
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -1073,22 +1072,54 @@ function Navbar() {
   }, []);
 
   const handleRestrictedAccess = () => {
-    alert("You are not authorized to access this section.");
+    alert("You are not the owner");
   };
 
   const handleLogout = () => {
     localStorage.clear();
     alert("You have been logged out.");
-    window.location.href = "/";
+    window.location.href = "/"; // or navigate('/') if using useNavigate
   };
 
-  const RestrictedLink = ({ to, children, allowedRoles = ["admin"] }) => {
-    return allowedRoles.includes(userRole) ? (
+  const RestrictedLink = ({ to, children }) => {
+    return userRole === "owner" ? (
       <Link to={to}>{children}</Link>
     ) : (
       <button onClick={handleRestrictedAccess} className="w-full text-left">
         {children}
       </button>
+    );
+  };
+
+  const roleAccess = {
+    owner: ['plantmaster', 'usermaster', 'truck', 'gate', 'loader', 'reports'],
+    admin: ['plantmaster', 'usermaster', 'gate', 'reports'],
+    dispatch: ['truck'],
+    gatekeeper: ['gate'],
+    report: ['reports'],
+    loader: ['loader'],
+    // Add more roles as needed
+  };
+
+  const canAccess = (route) => {
+    if (!userRole) return false;
+    // Split roles by comma and trim spaces
+    const roles = userRole.split(',').map(r => r.trim());
+    // Check if any role grants access
+    return roles.some(role => roleAccess[role]?.includes(route));
+  };
+
+  const NavLink = ({ to, routeKey, children, ...props }) => {
+    const handleClick = (e) => {
+      if (!canAccess(routeKey)) {
+        e.preventDefault();
+        alert('You do not have rights to access this page.');
+      }
+    };
+    return (
+      <Link to={to} onClick={handleClick} {...props} style={{ cursor: canAccess(routeKey) ? 'pointer' : 'not-allowed', opacity: canAccess(routeKey) ? 1 : 0.6 }}>
+        {children}
+      </Link>
     );
   };
 
@@ -1123,15 +1154,21 @@ function Navbar() {
                 }}
                 className="hover:text-yellow-400 flex items-center"
               >
-                Admin <span className="ml-1 text-sm">▼</span>
+                Admin Master <span className="ml-1 text-sm">▼</span>
               </button>
               {adminOpen && (
                 <div className="absolute mt-2 w-56 bg-gray-800 rounded-xl shadow-2xl z-50 py-2 border border-gray-700">
-                  <RestrictedLink to="/plantmaster" allowedRoles={["admin"]}>
+                  <NavLink to="/plantmaster" routeKey="plantmaster">
                     <span className="block px-6 py-3 text-white hover:bg-yellow-400 hover:text-gray-900">
                       🏭 Plant Master
                     </span>
-                  </RestrictedLink>
+                  </NavLink>
+
+                  <NavLink to="/usermaster" routeKey="usermaster">
+                    <span className="block px-6 py-3 text-white hover:bg-yellow-400 hover:text-gray-900">
+                      👤 User Master
+                    </span>
+                  </NavLink>
                 </div>
               )}
             </div>
@@ -1151,35 +1188,33 @@ function Navbar() {
               </button>
               {dispatcherOpen && (
                 <div className="absolute mt-2 w-56 bg-gray-800 rounded-xl shadow-2xl z-50 py-2 border border-gray-700">
-                  <RestrictedLink to="/truck" allowedRoles={["admin"]}>
+                  <NavLink to="/truck" routeKey="truck">
                     <span className="block px-6 py-3 text-white hover:bg-yellow-400 hover:text-gray-900">
                       🚛 Truck Transaction
                     </span>
-                  </RestrictedLink>
+                  </NavLink>
                 </div>
               )}
             </div>
 
             {/* Public or Semi-Public Routes */}
-            <Link
-              to="/gate"
-              className="hover:text-yellow-400 transition-all flex items-center"
-            >
-              🚪 Gate Keeper
-            </Link>
+            <NavLink to="/gate" routeKey="gate">
+              <span className="hover:text-yellow-400 transition-all flex items-center">
+                🚪 Gate Keeper
+              </span>
+            </NavLink>
 
-            <RestrictedLink to="/loader" allowedRoles={["admin"]}>
+            <NavLink to="/loader" routeKey="loader">
               <span className="hover:text-yellow-400 flex items-center">
                 📦 Loader
               </span>
-            </RestrictedLink>
+            </NavLink>
 
-            <Link
-              to="/reports"
-              className="hover:text-yellow-400 transition-all flex items-center"
-            >
-              📊 Reports
-            </Link>
+            <NavLink to="/reports" routeKey="reports">
+              <span className="hover:text-yellow-400 transition-all flex items-center">
+                📊 Reports
+              </span>
+            </NavLink>
 
             {/* Logout Button */}
             <button
@@ -1209,9 +1244,9 @@ function Navbar() {
               </button>
               {adminOpen && (
                 <div className="pl-6 space-y-2 mt-2">
-                  <RestrictedLink to="/plantmaster" allowedRoles={["admin"]}>
+                  <NavLink to="/plantmaster" routeKey="plantmaster">
                     <span className="block hover:text-yellow-400">🏭 Plant Master</span>
-                  </RestrictedLink>
+                  </NavLink>
                 </div>
               )}
             </div>
@@ -1231,24 +1266,24 @@ function Navbar() {
               </button>
               {dispatcherOpen && (
                 <div className="pl-6 space-y-2 mt-2">
-                  <RestrictedLink to="/truck" allowedRoles={["admin"]}>
+                  <NavLink to="/truck" routeKey="truck">
                     <span className="block hover:text-yellow-400">📝 Truck Transaction</span>
-                  </RestrictedLink>
+                  </NavLink>
                 </div>
               )}
             </div>
 
-            <Link to="/gate" className="block hover:text-yellow-400">
+            <NavLink to="/gate" routeKey="gate" className="block hover:text-yellow-400">
               🚪 Gate Keeper
-            </Link>
+            </NavLink>
 
-            <RestrictedLink to="/loader" allowedRoles={["admin"]}>
-              <span className="block hover:text-yellow-400">📦 Loader</span>
-            </RestrictedLink>
+            <NavLink to="/loader" routeKey="loader" className="block hover:text-yellow-400">
+              📦 Loader
+            </NavLink>
 
-            <Link to="/reports" className="block hover:text-yellow-400">
+            <NavLink to="/reports" routeKey="reports" className="block hover:text-yellow-400">
               📊 Reports
-            </Link>
+            </NavLink>
 
             <button
               onClick={handleLogout}
