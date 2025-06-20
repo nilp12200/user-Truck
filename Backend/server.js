@@ -84,6 +84,39 @@ app.use(bodyParser.json());
 //   }
 // });
 
+// app.post("/api/login", async (req, res) => {
+//   const { username, password } = req.body;
+
+//   if (!username || !password) {
+//     return res.status(400).json({
+//       success: false,
+//       message: "Username and password required",
+//     });
+//   }
+
+//   try {
+//     const result = await pool.query(
+//       "SELECT username, role FROM users WHERE LOWER(username) = LOWER($1) AND password = $2",
+//       [username, password]
+//     );
+
+//     if (result.rows.length > 0) {
+//       const user = result.rows[0];
+//       console.log("✅ Login user:", user); // Add this for debugging
+
+//       return res.json({
+//         success: true,
+//         username: user.username,  // Must match DB column name
+//         role: user.role           // Must match DB column name
+//       });
+//     } else {
+//       return res.status(401).json({ success: false, message: "Invalid credentials" });
+//     }
+//   } catch (err) {
+//     console.error("❌ SQL error:", err.message);
+//     return res.status(500).json({ success: false, message: "Server error" });
+//   }
+// });
 app.post("/api/login", async (req, res) => {
   const { username, password } = req.body;
 
@@ -102,19 +135,25 @@ app.post("/api/login", async (req, res) => {
 
     if (result.rows.length > 0) {
       const user = result.rows[0];
-      console.log("✅ Login user:", user); // Add this for debugging
+      console.log("✅ Login user:", user); // Debug log
 
       return res.json({
         success: true,
-        username: user.username,  // Must match DB column name
-        role: user.role           // Must match DB column name
+        username: user.username,
+        role: user.role,
       });
     } else {
-      return res.status(401).json({ success: false, message: "Invalid credentials" });
+      return res.status(401).json({
+        success: false,
+        message: "Invalid credentials",
+      });
     }
   } catch (err) {
     console.error("❌ SQL error:", err.message);
-    return res.status(500).json({ success: false, message: "Server error" });
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
   }
 });
 
