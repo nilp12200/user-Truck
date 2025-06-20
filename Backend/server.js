@@ -135,14 +135,16 @@ app.post("/api/login", async (req, res) => {
 
     if (result.rows.length > 0) {
       const user = result.rows[0];
-      console.log("✅ DB Result:", result.rows);     
+
+      console.log("✅ DB Result:", result.rows);
       console.log("✅ Username:", user.username);
-      console.log("✅ Role:", user.role);             
+      console.log("✅ Role:", user.role);
 
       return res.json({
         success: true,
+        message: "Login successful",
         username: user.username,
-        role: user.role,
+        role: user.role, // ✅ Send role back to frontend
       });
     } else {
       return res.status(401).json({
@@ -158,6 +160,7 @@ app.post("/api/login", async (req, res) => {
     });
   }
 });
+
 
 // // Get all plant names
 
