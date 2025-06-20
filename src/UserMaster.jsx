@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-
 const API_URL = import.meta.env.VITE_API_URL;
-
 const MODULE_RIGHTS = [
   { label: 'Admin', value: 'admin' },
   { label: 'GateKeeper', value: 'gatekeeper' },
@@ -23,19 +21,22 @@ export default function UserMaster() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
 
-
- useEffect(() => {
+  useEffect(() => {
     fetchPlants();
   }, []);
 
   const fetchPlants = async () => {
     try {
-      const res = await axios.get(`${API_URL}/api/plants`);
+      const res = await axios.get(`${API_URL}/plants`);
       setPlantList(res.data);
-    } catch (err) {
-      console.error('Error fetching plant list:', err);
+    } catch {
+      console.error('Error fetching plant list');
     }
   };
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
   const handleModuleRightChange = (e) => {
     const { value, checked } = e.target;
     setFormData((prev) => ({
