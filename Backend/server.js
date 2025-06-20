@@ -128,20 +128,24 @@ app.post("/api/login", async (req, res) => {
   }
 
   try {
-    const result = await pool.query(
-      "SELECT username, role FROM users WHERE LOWER(username) = LOWER($1) AND password = $2",
-      [username, password]
-    );
+   const result = await pool.query(
+  "SELECT username, role FROM users WHERE LOWER(username) = LOWER($1) AND password = $2",
+  [username, password]
+);
 
-    if (result.rows.length > 0) {
-      const user = result.rows[0];
-      console.log("✅ Login user:", user); // Debug log
+if (result.rows.length > 0) {
+  const user = result.rows[0];
+  console.log("✅ DB Result:", result.rows);     // 👈 log entire row
+  console.log("✅ Username:", user.username);
+  console.log("✅ Role:", user.role);             // 👈 see if role is undefined
 
-      return res.json({
-        success: true,
-        username: user.username,
-        role: user.role,
-      });
+  return res.json({
+    success: true,
+    username: user.username,
+    role: user.role,
+  });
+}
+
     } else {
       return res.status(401).json({
         success: false,
